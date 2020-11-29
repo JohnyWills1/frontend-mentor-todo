@@ -42,19 +42,36 @@ export default function Home() {
 
 		let newTodoList = todoList.slice();
 
+		newTodoList[index].done = bool;
+
 		if (bool === true) {
-			let newActiveList = todoList.filter((todoEl) => todoEl != todo);
-			setActiveList(newActiveList);
+			setActiveList((prevState) => {
+				const newData = prevState.filter((todoEl) => todoEl.done === false);
+				return newData;
+			});
+
+			const newCompList = newTodoList.filter((todoEl) => todoEl.done === true);
+			setCompList(newCompList);
 		} else {
 			setActiveList((prevState) => {
 				const newTodoList = [...prevState, todo];
 				return newTodoList;
 			});
+			setCompList((prevState) => {
+				const newCompList = prevState.filter((todoEl) => todoEl.done === true);
+				return newCompList;
+			});
 		}
 
-		newTodoList[index].done = bool;
-
 		setTodoList(newTodoList);
+	};
+
+	const clearCompList = () => {
+		setTodoList((prevState) => {
+			const newTodoList = prevState.filter((todoEl) => todoEl.done === false);
+			return newTodoList;
+		});
+		setCompList([]);
 	};
 
 	return (
@@ -118,9 +135,14 @@ export default function Home() {
 						)}
 						<div className={styles.bottomInfo}>
 							<div style={{ margin: '10px 0' }}>{activeList.length} items left</div>
-							<div>All | Active | Completed</div>
 							<div>
-								<button className={styles.clearButton}>Clear Completed</button>
+								All - {todoList.length} | Active - {activeList.length} | Completed -
+								{compList.length}
+							</div>
+							<div>
+								<button className={styles.clearButton} onClick={() => clearCompList()}>
+									Clear Completed
+								</button>
 							</div>
 						</div>
 					</div>
