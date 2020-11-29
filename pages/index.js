@@ -4,7 +4,11 @@ import { useState } from 'react';
 
 export default function Home() {
 	const [todoItem, setTodoItem] = useState('');
+
 	const [todoList, setTodoList] = useState([]);
+	const [activeList, setActiveList] = useState([]);
+	const [compList, setCompList] = useState([]);
+
 	const [theme, setTheme] = useState(false);
 
 	const onSubmit = (e) => {
@@ -17,6 +21,11 @@ export default function Home() {
 			name: todoItem,
 			done: false,
 		};
+
+		setActiveList((prevState) => {
+			const newTodoList = [...prevState, newTodoItem];
+			return newTodoList;
+		});
 
 		setTodoList((prevState) => {
 			const newTodoList = [...prevState, newTodoItem];
@@ -32,6 +41,16 @@ export default function Home() {
 		const index = todoList.indexOf(todo);
 
 		let newTodoList = todoList.slice();
+
+		if (bool === true) {
+			let newActiveList = todoList.filter((todoEl) => todoEl != todo);
+			setActiveList(newActiveList);
+		} else {
+			setActiveList((prevState) => {
+				const newTodoList = [...prevState, todo];
+				return newTodoList;
+			});
+		}
 
 		newTodoList[index].done = bool;
 
@@ -98,7 +117,7 @@ export default function Home() {
 							</div>
 						)}
 						<div className={styles.bottomInfo}>
-							<div style={{ margin: '10px 0' }}>{todoList.length} items left</div>
+							<div style={{ margin: '10px 0' }}>{activeList.length} items left</div>
 							<div>All | Active | Completed</div>
 							<div>
 								<button className={styles.clearButton}>Clear Completed</button>
