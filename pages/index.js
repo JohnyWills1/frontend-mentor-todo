@@ -1,65 +1,113 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	const [todoItem, setTodoItem] = useState('');
+	const [todoList, setTodoList] = useState([]);
+	const [theme, setTheme] = useState(false);
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+	const onSubmit = (e) => {
+		// Stop the page from refreshing on enter press
+		e.preventDefault();
+		// Clear the current input
+		e.target[0].value = '';
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+		const newTodoItem = {
+			name: todoItem,
+			done: false,
+		};
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+		setTodoList((prevState) => {
+			const newTodoList = [...prevState, newTodoItem];
+			return newTodoList;
+		});
+	};
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+	const swapTheme = () => {
+		setTheme(!theme);
+	};
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+	const changeToDo = (todo, bool) => {
+		const index = todoList.indexOf(todo);
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+		let newTodoList = todoList.slice();
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+		newTodoList[index].done = bool;
+
+		setTodoList(newTodoList);
+	};
+
+	return (
+		<div className={styles.container}>
+			<Head>
+				<title>To Do App</title>
+				<link rel='icon' href='/favicon.ico' />
+			</Head>
+
+			<main className={styles.main}>
+				<div className={styles.banner}>
+					<div className={styles.nameButton}>
+						<div className={styles.name}>TODO</div>
+						{theme ? (
+							<div className={styles.lightButton} onClick={(e) => swapTheme()} />
+						) : (
+							<div className={styles.darkButton} onClick={(e) => swapTheme()} />
+						)}
+					</div>
+					<div className={styles.todoForm}>
+						<form onSubmit={(e) => onSubmit(e)}>
+							<input
+								type='text'
+								className={styles.todoInput}
+								placeholder='Create a new todo...'
+								onChange={(e) => setTodoItem(e.target.value)}
+							/>
+						</form>
+					</div>
+					<div className={styles.listContainer}>
+						{todoList.length ? (
+							<>
+								{todoList.map((todo) => (
+									<div
+										style={{ padding: '20px', display: 'flex', alignItems: 'center' }}
+									>
+										<div className={styles.inputCheckbox}>
+											{todo.done ? (
+												<div
+													className={styles.inputCheck}
+													onClick={() => changeToDo(todo, false)}
+												/>
+											) : (
+												<div
+													className={styles.inputNoCheck}
+													onClick={() => changeToDo(todo, true)}
+												/>
+											)}
+										</div>
+
+										<label className={todo.done ? styles.strike : styles.noStrike}>
+											{todo.name}
+										</label>
+									</div>
+								))}
+							</>
+						) : (
+							<div style={{ padding: '10px 20px', color: 'red' }}>
+								No To Do's added yet!
+							</div>
+						)}
+						<div className={styles.bottomInfo}>
+							<div style={{ margin: '10px 0' }}>{todoList.length} items left</div>
+							<div>All | Active | Completed</div>
+							<div>
+								<button className={styles.clearButton}>Clear Completed</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className={styles.belowBanner}></div>
+			</main>
+		</div>
+	);
 }
