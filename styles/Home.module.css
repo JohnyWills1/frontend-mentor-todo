@@ -28,6 +28,17 @@
   position: relative;
 }
 
+.bannerD {
+  width: 1440px;
+  height: 300px;
+  background-image: url('../images/bg-desktop-dark.jpg');
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
 .nameButton {
   display: flex;
   justify-content: space-between;
@@ -74,11 +85,34 @@
   font-weight: 400;
   width: 550px;
   height: 60px;
+  caret-color: hsl(220, 98%, 61%);
+}
+
+.todoInputD {
+  background-color: hsl(235, 24%, 19%);
+  color: white;
+  border: none;
+  outline: none;
+  padding: 20px;
+  border-radius: 6px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  width: 550px;
+  height: 60px;
+  caret-color: hsl(220, 98%, 61%);
 }
 
 .belowBanner {
   width: 100vw;
-  height: 554px;
+  height: 68vh;
+  background-color: hsl(0, 0%, 98%);
+}
+
+.belowBannerD {
+  width: 100vw;
+  height: 68vh;
+  background-color: hsl(235, 21%, 11%);
 }
 
 .emptyCheckIcon {
@@ -102,13 +136,22 @@
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
 }
 
+.listContainerD {
+  width: 550px;
+  height: fit-content;
+  background-color: hsl(235, 24%, 19%);
+  color: white;
+  border-radius: 6px;
+  position: absolute;
+  top: 85%;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
+}
+
 .bottomInfo {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
-  border-top: 1px solid #E2E8F0;
-  opacity: 0.6;
   font-size: 14px;
 }
 
@@ -116,13 +159,32 @@
   border: none;
   outline: none;
   background: none;
+  padding: 0;
   font-family: 'Josefin Sans',
   sans-serif;
+  opacity: 0.5;
 }
 
 .clearButton:hover {
-  color: hsl(220, 98%, 61%);
+  opacity: 1;
   cursor: pointer;
+}
+
+.clearButtonD {
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: 'Josefin Sans',
+    sans-serif;
+  opacity: 0.5;
+  color: white;
+}
+
+.clearButtonD:hover {
+  opacity: 1;
+  cursor: pointer;
+  color: white;
 }
 
 .inputCheckbox {
@@ -153,7 +215,190 @@
   border-radius: 100%;
 }
 
+.inputNoCheckD {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 24px;
+  height: 24px;
+  background-color: hsl(235, 24%, 19%);
+  background-position: center;
+  border-radius: 100%;
+}
+
 .strike {
   text-decoration: line-through;
   opacity: 0.5;
+}
+
+.listOptions {
+  display: flex;
+  align-items: center;
+}
+
+.listOption {
+  opacity: 0.5;
+}
+
+.listOption:hover {
+  color: black;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.listOptionD {
+  opacity: 0.5;
+}
+
+.listOptionD:hover {
+  color: white;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.activeOption {
+  color: hsl(220, 98%, 61%);
+}
+
+.itemsLeft {
+  opacity: 0.5
+}
+
+.todoItem {
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todoItem:hover .todoCross {
+  display: block;
+}
+
+.todoItemD {
+  border-bottom: 1px solid hsl(233, 14%, 35%);
+  display: flex;
+  justify-content: space-between;
+}
+
+.todoItemD:hover .todoCross{
+  display: block;
+}
+
+.todoCross {
+  display: none;
+  height: 19px;
+  width: 19px;
+  background-repeat: no-repeat;
+  background-image: url('../images/icon-cross.svg');
+}
+
+.mobileListOptionList {
+  display: none;
+}
+
+.mobileListOptions {
+  display: none;
+}
+
+@media only screen and (max-width: 380px) {
+  .banner {
+    width: 375px;
+    height: 200px;
+    background-image: url('../images/bg-mobile-light.jpg');
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .belowBanner {
+    width: 100vw;
+    height: 75vh;
+    background-color: hsl(0, 0%, 98%);
+  }
+
+  .belowBannerD {
+    width: 100vw;
+    height: 75vh;
+    background-color: hsl(235, 21%, 11%);
+  }
+
+  .nameButton {
+    display: flex;
+    justify-content: space-between;
+    width: 320px;
+    padding-top: 5px;
+  }
+
+  .name {
+    color: white;
+    font-size: 26px;
+    letter-spacing: 8px;
+    font-weight: 700;
+  }
+
+  .darkButton {
+    background-image: url('../images/icon-moon.svg');
+    border: none;
+    height: 26px;
+    width: 26px;
+    background-size: 21px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .lightButton {
+    background-image: url('../images/icon-sun.svg');
+    border: none;
+    height: 13px;
+    width: 13px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .todoForm {
+    padding-top: 35px;
+  }
+
+  .todoInput {
+    border: none;
+    outline: none;
+    padding: 20px;
+    border-radius: 6px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    width: 320px;
+    height: 50px;
+    caret-color: hsl(220, 98%, 61%);
+  }
+
+  .listContainer {
+    width: 320px;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 6px;
+    position: absolute;
+    top: 90%;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobileListOptionList {
+    position: absolute;
+    display: block;
+    margin-top: 20px;
+    height: 50px;
+    width: 320px;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .listOptions {
+    display: none;
+  }
 }

@@ -9,6 +9,9 @@ export default function Home() {
 	const [activeList, setActiveList] = useState([]);
 	const [compList, setCompList] = useState([]);
 
+	const [listView, setListView] = useState('All');
+
+	// False = Light, True = Dark
 	const [theme, setTheme] = useState(false);
 
 	const onSubmit = (e) => {
@@ -54,8 +57,8 @@ export default function Home() {
 			setCompList(newCompList);
 		} else {
 			setActiveList((prevState) => {
-				const newTodoList = [...prevState, todo];
-				return newTodoList;
+				const newActiveList = [...prevState, todo];
+				return newActiveList;
 			});
 			setCompList((prevState) => {
 				const newCompList = prevState.filter((todoEl) => todoEl.done === true);
@@ -74,6 +77,18 @@ export default function Home() {
 		setCompList([]);
 	};
 
+	const changeListView = (listType) => {
+		setListView(listType);
+	};
+
+	const delTodo = (todo) => {
+		const newTodoList = todoList.filter((todoEl) => todoEl != todo);
+		const newActiveList = newTodoList.filter((todoEl) => todoEl.done === false);
+
+		setActiveList(newActiveList);
+		setTodoList(newTodoList);
+	};
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -82,7 +97,7 @@ export default function Home() {
 			</Head>
 
 			<main className={styles.main}>
-				<div className={styles.banner}>
+				<div className={theme ? styles.bannerD : styles.banner}>
 					<div className={styles.nameButton}>
 						<div className={styles.name}>TODO</div>
 						{theme ? (
@@ -95,59 +110,223 @@ export default function Home() {
 						<form onSubmit={(e) => onSubmit(e)}>
 							<input
 								type='text'
-								className={styles.todoInput}
+								className={theme ? styles.todoInputD : styles.todoInput}
 								placeholder='Create a new todo...'
 								onChange={(e) => setTodoItem(e.target.value)}
 							/>
 						</form>
 					</div>
-					<div className={styles.listContainer}>
+					<div className={theme ? styles.listContainerD : styles.listContainer}>
 						{todoList.length ? (
 							<>
-								{todoList.map((todo) => (
-									<div
-										style={{ padding: '20px', display: 'flex', alignItems: 'center' }}
-									>
-										<div className={styles.inputCheckbox}>
-											{todo.done ? (
+								{listView === 'Completed' ? (
+									<>
+										{compList.length ? (
+											compList.map((todo) => (
 												<div
-													className={styles.inputCheck}
-													onClick={() => changeToDo(todo, false)}
-												/>
-											) : (
-												<div
-													className={styles.inputNoCheck}
-													onClick={() => changeToDo(todo, true)}
-												/>
-											)}
-										</div>
+													style={{ padding: '20px', display: 'flex', alignItems: 'center' }}
+													className={theme ? styles.todoItemD : styles.todoItem}
+												>
+													<div style={{ alignItems: 'center', display: 'inherit' }}>
+														<div className={styles.inputCheckbox}>
+															{todo.done ? (
+																<div
+																	className={styles.inputCheck}
+																	onClick={() => changeToDo(todo, false)}
+																/>
+															) : (
+																<div
+																	className={theme ? styles.inputNoCheckD : styles.inputNoCheck}
+																	onClick={() => changeToDo(todo, true)}
+																/>
+															)}
+														</div>
+														<label className={todo.done ? styles.strike : styles.noStrike}>
+															{todo.name}
+														</label>
+													</div>
 
-										<label className={todo.done ? styles.strike : styles.noStrike}>
-											{todo.name}
-										</label>
-									</div>
-								))}
+													<div></div>
+												</div>
+											))
+										) : (
+											<div style={{ padding: '20px', color: 'red' }}>
+												No To Do's Completed Yet!
+											</div>
+										)}
+									</>
+								) : listView === 'Active' ? (
+									<>
+										{activeList.length ? (
+											activeList.map((todo) => (
+												<div
+													style={{ padding: '20px', display: 'flex', alignItems: 'center' }}
+													className={theme ? styles.todoItemD : styles.todoItem}
+												>
+													<div style={{ alignItems: 'center', display: 'inherit' }}>
+														<div className={styles.inputCheckbox}>
+															{todo.done ? (
+																<div
+																	className={styles.inputCheck}
+																	onClick={() => changeToDo(todo, false)}
+																/>
+															) : (
+																<div
+																	className={theme ? styles.inputNoCheckD : styles.inputNoCheck}
+																	onClick={() => changeToDo(todo, true)}
+																/>
+															)}
+														</div>
+
+														<label className={todo.done ? styles.strike : styles.noStrike}>
+															{todo.name}
+														</label>
+													</div>
+
+													<div className={styles.todoCross} onClick={() => delTodo(todo)} />
+												</div>
+											))
+										) : (
+											<div style={{ padding: '20px', color: 'red' }}>
+												No Active To Do's!
+											</div>
+										)}
+									</>
+								) : (
+									<>
+										{todoList.map((todo) => (
+											<div
+												style={{ padding: '20px', display: 'flex', alignItems: 'center' }}
+												className={theme ? styles.todoItemD : styles.todoItem}
+											>
+												<div style={{ alignItems: 'center', display: 'inherit' }}>
+													<div className={styles.inputCheckbox}>
+														{todo.done ? (
+															<div
+																className={styles.inputCheck}
+																onClick={() => changeToDo(todo, false)}
+															/>
+														) : (
+															<div
+																className={theme ? styles.inputNoCheckD : styles.inputNoCheck}
+																onClick={() => changeToDo(todo, true)}
+															/>
+														)}
+													</div>
+
+													<label className={todo.done ? styles.strike : styles.noStrike}>
+														{todo.name}
+													</label>
+												</div>
+
+												<div className={styles.todoCross} onClick={() => delTodo(todo)} />
+											</div>
+										))}
+									</>
+								)}
 							</>
 						) : (
-							<div style={{ padding: '10px 20px', color: 'red' }}>
+							<div style={{ padding: '20px', color: 'red' }}>
 								No To Do's added yet!
 							</div>
 						)}
 						<div className={styles.bottomInfo}>
-							<div style={{ margin: '10px 0' }}>{activeList.length} items left</div>
-							<div>
-								All - {todoList.length} | Active - {activeList.length} | Completed -
-								{compList.length}
+							{/* If listView === Completed {...} elseif {...} else {All} */}
+
+							<div style={{ margin: '10px 0' }} className={styles.itemsLeft}>
+								{activeList.length} items left
+							</div>
+							<div className={styles.listOptions}>
+								<div
+									className={
+										listView === 'All'
+											? styles.activeOption
+											: theme
+											? styles.listOptionD
+											: styles.listOption
+									}
+									style={{ paddingRight: '10px' }}
+									onClick={() => changeListView('All')}
+								>
+									All - {todoList.length}
+								</div>
+								<div
+									className={
+										listView === 'Active'
+											? styles.activeOption
+											: theme
+											? styles.listOptionD
+											: styles.listOption
+									}
+									style={{ paddingRight: '10px' }}
+									onClick={() => changeListView('Active')}
+								>
+									Active - {activeList.length}
+								</div>
+								<div
+									className={
+										listView === 'Completed'
+											? styles.activeOption
+											: theme
+											? styles.listOptionD
+											: styles.listOption
+									}
+									onClick={() => changeListView('Completed')}
+								>
+									Completed - {compList.length}
+								</div>
 							</div>
 							<div>
-								<button className={styles.clearButton} onClick={() => clearCompList()}>
+								<button
+									className={theme ? styles.clearButtonD : styles.clearButton}
+									onClick={() => clearCompList()}
+								>
 									Clear Completed
 								</button>
 							</div>
 						</div>
+						<div className={styles.mobileListOptionList}>
+							{' '}
+							<div
+								className={
+									listView === 'All'
+										? styles.activeOption
+										: theme
+										? styles.listOptionD
+										: styles.listOption
+								}
+								onClick={() => changeListView('All')}
+							>
+								All - {todoList.length}
+							</div>
+							<div
+								className={
+									listView === 'Active'
+										? styles.activeOption
+										: theme
+										? styles.listOptionD
+										: styles.listOption
+								}
+								onClick={() => changeListView('Active')}
+							>
+								Active - {activeList.length}
+							</div>
+							<div
+								className={
+									listView === 'Completed'
+										? styles.activeOption
+										: theme
+										? styles.listOptionD
+										: styles.listOption
+								}
+								onClick={() => changeListView('Completed')}
+							>
+								Completed - {compList.length}
+							</div>
+						</div>
 					</div>
 				</div>
-				<div className={styles.belowBanner}></div>
+				<div className={theme ? styles.belowBannerD : styles.belowBanner}></div>
 			</main>
 		</div>
 	);
