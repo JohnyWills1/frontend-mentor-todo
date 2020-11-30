@@ -285,8 +285,11 @@ export default function Home() {
 								</button>
 							</div>
 						</div>
-						<div className={styles.mobileListOptionList}>
-							{' '}
+						<div
+							className={
+								theme ? styles.mobileListOptionListD : styles.mobileListOptionList
+							}
+						>
 							<div
 								className={
 									listView === 'All'
